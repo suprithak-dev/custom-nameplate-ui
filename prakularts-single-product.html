@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SS Matte House Nameplate – PrakulArts</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-l:#E8C97A;--gold-p:#F5EDD6;
+  --dark:#0F0E0C;--d2:#1A1814;--d3:#252219;--d4:#2E2B1F;
+  --muted:#8C8572;--light:#C4BCA8;--white:#FDFAF4;
+  --green:#25D366;--green-d:#1da851;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--dark);color:var(--white);overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;background:rgba(15,14,12,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.12)}
+.nav-logo{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-logo span{font-size:10px;font-family:var(--sans);font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-left:10px;border-left:1px solid rgba(201,168,76,.3)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--light);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-cart{background:var(--gold);color:var(--dark);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px;text-decoration:none;transition:background .2s}
+.nav-cart:hover{background:var(--gold-l)}
+.breadcrumb{padding:14px 64px;background:var(--d2);border-bottom:1px solid rgba(255,255,255,.04);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s}
+.breadcrumb a:hover{color:var(--gold)}
+.bc-sep{color:rgba(255,255,255,.15)}
+
+/* ── LAYOUT ── */
+.product-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:90vh}
+
+/* ══ LEFT: GALLERY + LIVE PREVIEW ══ */
+.gallery-col{background:var(--d2);border-right:1px solid rgba(255,255,255,.05);padding:48px 48px 32px;position:sticky;top:60px;height:fit-content}
+
+/* Material tabs */
+.mat-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.mat-tab{padding:6px 14px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;font-family:var(--sans);border-radius:2px}
+.mat-tab.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08)}
+.mat-tab:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--light)}
+
+/* Canvas preview area */
+.preview-wrap{position:relative;width:100%;background:var(--d3);overflow:hidden;border-radius:4px;margin-bottom:14px}
+.preview-bg{width:100%;display:block;object-fit:cover;border-radius:4px}
+#previewCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.preview-label{position:absolute;top:12px;left:12px;background:rgba(201,168,76,.9);color:var(--dark);font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:2px}
+.preview-hint{position:absolute;bottom:12px;right:12px;background:rgba(15,14,12,.75);backdrop-filter:blur(6px);color:var(--light);font-size:10px;letter-spacing:.08em;padding:5px 10px;border-radius:2px}
+
+/* Thumbnails */
+.thumbs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.thumb{width:68px;height:68px;border:1px solid rgba(255,255,255,.08);border-radius:3px;overflow:hidden;cursor:pointer;transition:border-color .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--d3);font-size:22px;color:rgba(201,168,76,.25)}
+.thumb.active{border-color:var(--gold)}
+.thumb canvas{width:100%;height:100%;display:block}
+
+.gallery-note{text-align:center;font-size:11px;color:var(--muted);letter-spacing:.06em;padding-top:8px;border-top:1px solid rgba(255,255,255,.05)}
+
+/* ══ RIGHT: PRODUCT INFO ══ */
+.info-col{padding:48px 52px;overflow-y:auto}
+.cat-tag{display:inline-block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:4px 12px;margin-bottom:14px;border-radius:2px}
+.prod-name{font-family:var(--serif);font-size:42px;font-weight:300;line-height:1.1;margin-bottom:14px}
+.prod-name em{font-style:italic;color:var(--gold)}
+
+/* Rating */
+.rating-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.stars{color:var(--gold);font-size:15px;letter-spacing:2px}
+.rat-text{font-size:13px;color:var(--muted)}
+.rat-div{width:1px;height:14px;background:rgba(255,255,255,.1)}
+.rat-link{font-size:13px;color:var(--gold);text-decoration:none}
+.badge-pop{background:var(--gold);color:var(--dark);font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:.06em}
+
+/* Price */
+.price-block{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.06)}
+.price-main{font-family:var(--serif);font-size:40px;font-weight:300;color:var(--white);line-height:1}
+.price-old{font-size:17px;color:var(--muted);text-decoration:line-through;margin-left:8px}
+.price-off{display:inline-block;background:rgba(226,75,74,.15);color:#E24B4A;font-size:11px;font-weight:500;padding:3px 8px;margin-left:8px;border-radius:2px}
+.price-note{font-size:12px;color:var(--muted);margin-top:6px}
+.price-free{font-size:12px;color:#4CAF7D;margin-top:3px}
+
+/* Options */
+.opt-section{margin-bottom:22px}
+.opt-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--light);margin-bottom:10px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+.opt-label .sel{color:var(--gold);font-weight:400;font-size:11px;letter-spacing:.06em;text-transform:none}
+
+/* Size pills */
+.size-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sz-btn{padding:10px 12px;font-size:11px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;font-family:var(--sans);text-align:left;border-radius:3px;line-height:1.4}
+.sz-btn strong{display:block;font-size:12px;color:var(--light);font-weight:400;margin-bottom:1px}
+.sz-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.07)}
+.sz-btn.active strong{color:var(--gold)}
+.sz-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--light)}
+
+/* Finish pills */
+.finish-row{display:flex;gap:8px;flex-wrap:wrap}
+.fin-btn{padding:8px 18px;font-size:11px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;font-family:var(--sans);border-radius:3px;display:flex;align-items:center;gap:6px}
+.fin-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.fin-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.07)}
+.fin-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:var(--light)}
+
+/* Live text input */
+.live-input-wrap{position:relative;margin-bottom:6px}
+.live-input{width:100%;background:var(--d3);border:1.5px solid rgba(255,255,255,.1);color:var(--white);font-size:15px;padding:14px 16px;font-family:var(--serif);font-weight:300;letter-spacing:.08em;transition:border-color .25s;border-radius:3px}
+.live-input:focus{outline:none;border-color:var(--gold)}
+.live-input::placeholder{color:var(--muted);font-style:italic}
+.live-count{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted);pointer-events:none}
+.field-hint{font-size:11px;color:var(--muted);letter-spacing:.04em;margin-bottom:4px}
+.live-indicator{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gold);margin-top:6px;opacity:0;transition:opacity .3s}
+.live-indicator.show{opacity:1}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.4);opacity:1}}
+
+.line2-input{width:100%;background:var(--d3);border:1.5px solid rgba(255,255,255,.1);color:var(--white);font-size:13px;padding:11px 16px;font-family:var(--sans);font-weight:300;transition:border-color .25s;border-radius:3px;margin-bottom:6px}
+.line2-input:focus{outline:none;border-color:rgba(201,168,76,.5)}
+.line2-input::placeholder{color:var(--muted)}
+
+/* Preview notice */
+.preview-notice{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.22);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;border-radius:4px}
+.notice-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.notice-text strong{display:block;font-size:13px;color:var(--white);font-weight:500;margin-bottom:3px}
+.notice-text span{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* CTA Buttons */
+.cta-stack{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.btn-customize{background:var(--dark);color:var(--white);font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;padding:18px 36px;border:none;cursor:pointer;font-family:var(--sans);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:3px}
+.btn-customize:hover{background:var(--d4);transform:translateY(-1px)}
+.btn-order{background:var(--gold);color:var(--dark);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:18px 36px;border:none;cursor:pointer;font-family:var(--sans);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:3px}
+.btn-order:hover{background:var(--gold-l);transform:translateY(-1px);box-shadow:0 6px 24px rgba(201,168,76,.3)}
+.btn-whatsapp{background:var(--green);color:#fff;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:16px 36px;border:none;cursor:pointer;font-family:var(--sans);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;border-radius:3px}
+.btn-whatsapp:hover{background:var(--green-d);transform:translateY(-1px)}
+.wa-icon{width:20px;height:20px;flex-shrink:0}
+
+.wa-subtext{text-align:center;font-size:11px;color:var(--muted);margin-top:-4px}
+
+/* Delivery Timeline */
+.delivery-card{background:var(--d3);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:20px;margin-bottom:18px}
+.delivery-title{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:500}
+
+.timeline{display:flex;align-items:flex-start;position:relative;margin-bottom:20px}
+.timeline-track{position:absolute;top:18px;left:18px;right:18px;height:2px;background:rgba(255,255,255,.08);z-index:0}
+.timeline-progress{position:absolute;top:0;left:0;height:100%;background:var(--gold);width:40%;border-radius:1px}
+.timeline-steps{display:flex;justify-content:space-between;width:100%;position:relative;z-index:1}
+.tl-step{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+.tl-icon-wrap{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:var(--d3);display:flex;align-items:center;justify-content:center;font-size:14px;position:relative}
+.tl-icon-wrap.done{border-color:var(--gold);background:rgba(201,168,76,.15)}
+.tl-icon-wrap.active{border-color:var(--gold);background:var(--gold)}
+.tl-icon-wrap.active span{filter:brightness(0)}
+.tl-date{font-size:10px;font-weight:500;color:var(--white);letter-spacing:.04em;text-align:center}
+.tl-label{font-size:9px;color:var(--muted);letter-spacing:.06em;text-align:center;text-transform:uppercase}
+.tl-status{font-size:9px;color:var(--gold);letter-spacing:.06em;text-align:center;font-weight:500;margin-top:-4px}
+
+.shipping-opts{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.ship-opt{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:3px;cursor:pointer;transition:border-color .2s}
+.ship-opt.selected{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.05)}
+.ship-opt:hover:not(.selected){border-color:rgba(255,255,255,.12)}
+.ship-left{display:flex;align-items:center;gap:8px}
+.ship-radio{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+.ship-opt.selected .ship-radio{border-color:var(--gold)}
+.ship-radio-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:none}
+.ship-opt.selected .ship-radio-dot{display:block}
+.ship-info strong{display:block;font-size:12px;color:var(--light);font-weight:400}
+.ship-info span{font-size:11px;color:var(--muted)}
+.ship-price{font-size:12px;color:var(--gold);font-weight:500}
+.ship-free{font-size:11px;color:#4CAF7D;text-align:center;margin-top:8px;display:flex;align-items:center;gap:4px;justify-content:center}
+
+/* Trust row */
+.trust-mini{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.trust-item{display:flex;align-items:flex-start;gap:9px;padding:12px;background:var(--d3);border-radius:3px;border:1px solid rgba(255,255,255,.04)}
+.trust-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.trust-text strong{display:block;font-size:11px;color:var(--light);font-weight:500;margin-bottom:2px}
+.trust-text span{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* Product tabs */
+.prod-tabs{border-top:1px solid rgba(255,255,255,.06);margin-top:4px}
+.ptab-row{display:flex}
+.ptab-btn{padding:14px 18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:var(--sans);transition:color .2s,border-color .2s}
+.ptab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.ptab-content{padding:22px 0;display:none;font-size:13px;color:var(--muted);line-height:1.8;font-weight:300}
+.ptab-content.active{display:block}
+.spec-row{display:grid;grid-template-columns:45% 1fr;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px}
+.spec-row span:first-child{color:var(--light)}
+
+/* Reviews */
+.reviews-section{padding:64px;background:var(--dark);border-top:1px solid rgba(255,255,255,.05)}
+.sec-tag{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.sec-title{font-family:var(--serif);font-size:38px;font-weight:300;margin-bottom:36px}
+.sec-title em{font-style:italic;color:var(--gold)}
+.review-summary{display:grid;grid-template-columns:160px 1fr;gap:48px;align-items:center;margin-bottom:40px}
+.big-num{font-family:var(--serif);font-size:72px;font-weight:300;color:var(--gold);line-height:1;text-align:center}
+.big-stars{color:var(--gold);font-size:18px;letter-spacing:3px;text-align:center;margin:6px 0}
+.big-count{font-size:11px;color:var(--muted);text-align:center}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.bar-lbl{font-size:11px;color:var(--muted);width:28px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;background:var(--gold);border-radius:2px}
+.bar-cnt{font-size:11px;color:var(--muted);width:20px;flex-shrink:0}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.rev-card{background:var(--d2);border:1px solid rgba(255,255,255,.05);padding:26px;border-radius:4px;transition:border-color .3s}
+.rev-card:hover{border-color:rgba(201,168,76,.18)}
+.rev-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.rev-av{display:flex;align-items:center;gap:10px}
+.av-circle{width:38px;height:38px;border-radius:50%;background:var(--d3);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;color:var(--gold);flex-shrink:0}
+.rev-name{font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px}
+.rev-date{font-size:10px;color:var(--muted)}
+.rev-stars{color:var(--gold);font-size:13px;letter-spacing:1.5px}
+.rev-text{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--light);line-height:1.75;font-weight:300}
+.rev-verified{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:#4CAF7D;margin-top:10px;letter-spacing:.04em}
+
+/* Related */
+.related-section{padding:64px;background:var(--d2);border-top:1px solid rgba(255,255,255,.05)}
+.rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px}
+.rel-card{background:var(--dark);border:1px solid rgba(255,255,255,.05);border-radius:3px;overflow:hidden;cursor:pointer;transition:border-color .3s,transform .3s}
+.rel-card:hover{border-color:rgba(201,168,76,.22);transform:translateY(-3px)}
+.rel-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.rel-body{padding:14px}
+.rel-mat{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.rel-name{font-family:var(--serif);font-size:17px;font-weight:400;color:var(--white);margin-bottom:4px}
+.rel-price{font-family:var(--serif);font-size:18px;color:var(--white)}
+
+/* Sticky bar */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(15,14,12,.97);backdrop-filter:blur(14px);border-top:1px solid rgba(201,168,76,.15);padding:12px 64px;display:flex;align-items:center;justify-content:space-between;gap:20px;transform:translateY(100%);transition:transform .35s}
+.sticky-bar.up{transform:translateY(0)}
+.sticky-left{display:flex;align-items:center;gap:16px}
+.sticky-name{font-family:var(--serif);font-size:17px;font-weight:300;color:var(--white)}
+.sticky-price{font-family:var(--serif);font-size:22px;color:var(--gold)}
+.sticky-right{display:flex;gap:10px}
+.sticky-wa{background:var(--green);color:#fff;border:none;padding:11px 22px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-family:var(--sans);border-radius:3px;display:flex;align-items:center;gap:6px;text-decoration:none}
+.sticky-order{background:var(--gold);color:var(--dark);border:none;padding:11px 28px;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-family:var(--sans);border-radius:3px}
+.sticky-order:hover{background:var(--gold-l)}
+
+/* Animate in */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.au{opacity:0;animation:fadeUp .45s ease forwards}
+
+/* Bg helpers */
+.bg-ss{background:linear-gradient(135deg,#2C2C2C,#4A4A4A)}
+.bg-gold{background:linear-gradient(135deg,#3D2E10,#8B6520)}
+.bg-brass{background:linear-gradient(135deg,#3A2E10,#7A6025)}
+.bg-rg{background:linear-gradient(135deg,#3D2420,#8B4840)}
+.bg-acr{background:linear-gradient(135deg,#1A1A2E,#2A2A4A)}
+.bg-3d{background:linear-gradient(135deg,#1A2A2A,#1E3A3A)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">PrakulArts <span>Nameplates</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Materials</a></li>
+    <li><a href="#">How It Works</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="https://wa.me/91XXXXXXXXXX?text=Hi%2C%20I%20need%20help%20with%20a%20nameplate%20order" target="_blank" class="nav-cart" style="background:var(--green)">💬 WhatsApp</a>
+    <a href="#" class="nav-cart">🛒 Cart (0)</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="#">Home</a><span class="bc-sep">›</span>
+  <a href="#">Name Plates</a><span class="bc-sep">›</span>
+  <a href="#">Stainless Steel</a><span class="bc-sep">›</span>
+  <span style="color:var(--light)">SS Matte House Nameplate</span>
+</div>
+
+<!-- PRODUCT WRAP -->
+<div class="product-wrap" id="product-top">
+
+  <!-- ═══ LEFT: GALLERY ═══ -->
+  <div class="gallery-col au" style="animation-delay:.05s">
+
+    <!-- Material switch tabs -->
+    <div class="mat-tabs">
+      <button class="mat-tab active" data-mat="ss" onclick="switchMat(this,'ss')">Stainless Steel</button>
+      <button class="mat-tab" data-mat="gold" onclick="switchMat(this,'gold')">Gold</button>
+      <button class="mat-tab" data-mat="brass" onclick="switchMat(this,'brass')">Brass</button>
+      <button class="mat-tab" data-mat="rg" onclick="switchMat(this,'rg')">Rose Gold</button>
+    </div>
+
+    <!-- LIVE PREVIEW -->
+    <div class="preview-wrap" id="previewWrap">
+      <!-- The "wall" background — drawn on canvas below, but we paint wall colour via CSS -->
+      <div id="previewBg" style="width:100%;height:460px;position:relative;background:linear-gradient(160deg,#3a3f35,#2a2e28);border-radius:4px;overflow:hidden;">
+        <!-- Simulated wall texture using CSS -->
+        <div style="position:absolute;inset:0;background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.12%22/></svg>');opacity:.5;border-radius:4px;"></div>
+        <!-- Nameplate canvas on top -->
+        <canvas id="nameplateCanvas" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:6px;box-shadow:0 8px 32px rgba(0,0,0,.5)"></canvas>
+      </div>
+      <div class="preview-label" id="previewLabel">● Live Preview</div>
+      <div class="preview-hint">Type your name → see it update live</div>
+    </div>
+
+    <!-- Thumbs -->
+    <div class="thumbs">
+      <div class="thumb active" onclick="selectThumb(this,0)" title="Front View">
+        <canvas id="thumb0" width="68" height="68"></canvas>
+      </div>
+      <div class="thumb" onclick="selectThumb(this,1)" title="Side angle">⬡</div>
+      <div class="thumb" onclick="selectThumb(this,2)" title="Mounted on wall">🏠</div>
+      <div class="thumb" onclick="selectThumb(this,3)" title="Close-up engraving">🔍</div>
+    </div>
+
+    <div class="gallery-note">🎨 Live text preview · Images show real finish quality</div>
+  </div>
+
+  <!-- ═══ RIGHT: INFO ═══ -->
+  <div class="info-col">
+
+    <div class="cat-tag au" style="animation-delay:.1s">Stainless Steel · Matte Finish</div>
+    <h1 class="prod-name au" style="animation-delay:.15s">SS Matte House<br><em>Nameplate</em></h1>
+
+    <div class="rating-row au" style="animation-delay:.2s">
+      <span class="stars">★★★★★</span>
+      <span class="rat-text">5.0</span>
+      <div class="rat-div"></div>
+      <a href="#reviews" class="rat-link">42 reviews</a>
+      <div class="rat-div"></div>
+      <span style="font-size:13px;color:#4CAF7D">500+ sold</span>
+      <span class="badge-pop">Popular</span>
+    </div>
+
+    <!-- Price -->
+    <div class="price-block au" style="animation-delay:.22s">
+      <div>
+        <span class="price-main" id="displayPrice">₹799</span>
+        <span class="price-old">₹1,099</span>
+        <span class="price-off">27% OFF</span>
+      </div>
+      <div class="price-note">Inclusive of all taxes</div>
+      <div class="price-free">✓ Free shipping on orders above ₹999 · Pan-India delivery</div>
+    </div>
+
+    <!-- SIZE -->
+    <div class="opt-section au" style="animation-delay:.24s">
+      <div class="opt-label">Size <span class="sel" id="sizeLabel">Small — 6 × 4 inch selected</span></div>
+      <div class="size-grid">
+        <button class="sz-btn active" data-price="799" onclick="selectSize(this,'Small — 6 × 4 inch','799')">
+          <strong>Small</strong>6 × 4 inch (150 × 100 mm)
+        </button>
+        <button class="sz-btn" data-price="999" onclick="selectSize(this,'Medium — 10 × 6 inch','999')">
+          <strong>Medium</strong>10 × 6 inch (250 × 150 mm)
+        </button>
+        <button class="sz-btn" data-price="1299" onclick="selectSize(this,'Large — 14 × 8 inch','1299')">
+          <strong>Large</strong>14 × 8 inch (355 × 200 mm)
+        </button>
+        <button class="sz-btn" data-price="1599" onclick="selectSize(this,'XL — 18 × 10 inch','1599')">
+          <strong>XL</strong>18 × 10 inch (457 × 254 mm)
+        </button>
+        <button class="sz-btn" data-price="0" onclick="selectSize(this,'Custom size','0')" style="grid-column:span 2">
+          <strong>Custom Size</strong>Mention dimensions in special instructions
+        </button>
+      </div>
+    </div>
+
+    <!-- FINISH -->
+    <div class="opt-section au" style="animation-delay:.26s">
+      <div class="opt-label">Finish <span class="sel" id="finishLabel">Matte selected</span></div>
+      <div class="finish-row">
+        <button class="fin-btn active" onclick="selectFinish(this,'Matte')">
+          <div class="fin-dot" style="background:linear-gradient(135deg,#3A3A3A,#5A5A5A)"></div>Matte
+        </button>
+        <button class="fin-btn" onclick="selectFinish(this,'Glossy / Mirror')">
+          <div class="fin-dot" style="background:linear-gradient(135deg,#888,#CCC)"></div>Glossy / Mirror
+        </button>
+        <button class="fin-btn" onclick="selectFinish(this,'Brushed')">
+          <div class="fin-dot" style="background:repeating-linear-gradient(90deg,#444 0px,#555 1px,#444 2px)"></div>Brushed
+        </button>
+      </div>
+    </div>
+
+    <!-- LIVE NAME INPUT -->
+    <div class="opt-section au" style="animation-delay:.28s">
+      <div class="opt-label">Your Name / Text <span style="color:#E24B4A;font-size:10px;font-weight:500">Required</span></div>
+      <div class="live-input-wrap">
+        <input type="text" class="live-input" id="mainText" placeholder="e.g. The Sharma Family" maxlength="30" oninput="updatePreview()" autocomplete="off">
+        <span class="live-count" id="mainCount">30</span>
+      </div>
+      <div class="live-indicator" id="liveIndicator">
+        <div class="pulse-dot"></div>
+        Updating preview on nameplate above ↑
+      </div>
+      <div class="field-hint" style="margin-top:6px">Line 1 · Appears as main text on plate</div>
+    </div>
+
+    <div class="opt-section au" style="animation-delay:.3s">
+      <div class="opt-label">Line 2 <span class="sel">Optional — house number, sub-text</span></div>
+      <input type="text" class="line2-input" id="line2Text" placeholder="e.g.  House No. 42 · Bengaluru" maxlength="35" oninput="updatePreview()">
+      <div class="opt-label" style="margin-top:12px">Line 3 <span class="sel">Optional</span></div>
+      <input type="text" class="line2-input" id="line3Text" placeholder="e.g.  The Sharma's" maxlength="35" oninput="updatePreview()">
+      <div class="field-hint">Up to 3 lines supported · Font & layout confirmed in design preview</div>
+    </div>
+
+    <!-- PREVIEW NOTICE -->
+    <div class="preview-notice au" style="animation-delay:.32s">
+      <div class="notice-icon">◉</div>
+      <div class="notice-text">
+        <strong>Design Preview Included — Free</strong>
+        <span>We'll email you a detailed design proof within 24 hours. Production begins only after you approve. Nothing is manufactured without your confirmation.</span>
+      </div>
+    </div>
+
+    <!-- CTA BUTTONS -->
+    <div class="cta-stack au" style="animation-delay:.34s">
+      <button class="btn-order" onclick="handleOrder()">⚡ Order Now — Pay Securely</button>
+      <button class="btn-customize" onclick="handleCustomize()">✏ Customise Yours — Get a Free Mockup</button>
+      <div style="text-align:center;font-size:11px;color:var(--muted);margin:-2px 0 2px">Need help choosing? Talk to an expert</div>
+      <a class="btn-whatsapp" href="https://wa.me/91XXXXXXXXXX?text=Hi%20PrakulArts%2C%20I%27m%20interested%20in%20the%20SS%20Matte%20Nameplate.%20Can%20you%20help%20me%20customise%20it%3F" target="_blank">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chat with a Style Expert on WhatsApp
+      </a>
+    </div>
+
+    <!-- DELIVERY TIMELINE -->
+    <div class="delivery-card au" style="animation-delay:.36s">
+      <div class="delivery-title">📦 Estimated Delivery</div>
+
+      <div class="timeline">
+        <div class="timeline-track"><div class="timeline-progress"></div></div>
+        <div class="timeline-steps">
+          <div class="tl-step">
+            <div class="tl-icon-wrap done"><span>🛍</span></div>
+            <div class="tl-date" id="tl-d0"></div>
+            <div class="tl-label">Order Placed</div>
+            <div class="tl-status">Done</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon-wrap active"><span>⚒</span></div>
+            <div class="tl-date" id="tl-d1"></div>
+            <div class="tl-label">Being Crafted</div>
+            <div class="tl-status">In Progress</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon-wrap"><span>🚚</span></div>
+            <div class="tl-date" id="tl-d2"></div>
+            <div class="tl-label">Dispatched</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon-wrap"><span>🏠</span></div>
+            <div class="tl-date" id="tl-d3"></div>
+            <div class="tl-label">Delivered</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping options -->
+      <div class="shipping-opts">
+        <div class="ship-opt selected" onclick="selectShip(this,'standard')">
+          <div class="ship-left">
+            <div class="ship-radio"><div class="ship-radio-dot"></div></div>
+            <div class="ship-info"><strong>🚚 Standard Shipping</strong><span id="std-dates">5–8 working days</span></div>
+          </div>
+          <span class="ship-price">₹50</span>
+        </div>
+        <div class="ship-opt" onclick="selectShip(this,'express')">
+          <div class="ship-left">
+            <div class="ship-radio"><div class="ship-radio-dot"></div></div>
+            <div class="ship-info"><strong>⚡ Express Shipping</strong><span id="exp-dates">2–4 working days</span></div>
+          </div>
+          <span class="ship-price">₹120</span>
+        </div>
+      </div>
+      <div class="ship-free">🎁 FREE shipping on orders above ₹999</div>
+    </div>
+
+    <!-- TRUST MINI -->
+    <div class="trust-mini au" style="animation-delay:.38s">
+      <div class="trust-item">
+        <div class="trust-icon">◉</div>
+        <div class="trust-text"><strong>Preview Guarantee</strong><span>Design proof before production. Your approval required.</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-text"><strong>Secure Payment</strong><span>UPI · Cards · Net Banking · EMI</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">↺</div>
+        <div class="trust-text"><strong>Satisfaction Guaranteed</strong><span>Doesn't match? We remake free.</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🇮🇳</div>
+        <div class="trust-text"><strong>Made in India</strong><span>Premium-grade materials, crafted locally.</span></div>
+      </div>
+    </div>
+
+    <!-- PRODUCT TABS -->
+    <div class="prod-tabs au" style="animation-delay:.4s">
+      <div class="ptab-row">
+        <button class="ptab-btn active" onclick="switchTab(this,'desc')">Description</button>
+        <button class="ptab-btn" onclick="switchTab(this,'specs')">Specifications</button>
+        <button class="ptab-btn" onclick="switchTab(this,'care')">Care & Install</button>
+        <button class="ptab-btn" onclick="switchTab(this,'faq')">FAQ</button>
+      </div>
+      <div class="ptab-content active" id="tab-desc">
+        <p style="margin-bottom:12px">The PrakulArts SS Matte Nameplate is precision-cut from 304-grade stainless steel — the same grade used in commercial architecture. Each plate is sandblasted to a silky, uniform matte finish and laser-engraved with your custom text, creating a deep, permanent mark that never fades.</p>
+        <p>Designed to withstand Indian outdoor conditions — monsoons, coastal humidity, summer heat. Ships with stainless steel screws, wall plugs, and a protective peel film. A digital design proof is sent within 24 hours of ordering.</p>
+      </div>
+      <div class="ptab-content" id="tab-specs">
+        <div class="spec-row"><span>Material</span><span>304-grade Stainless Steel</span></div>
+        <div class="spec-row"><span>Finish Options</span><span>Matte · Glossy · Brushed</span></div>
+        <div class="spec-row"><span>Engraving</span><span>Laser-engraved (permanent, never fades)</span></div>
+        <div class="spec-row"><span>Thickness</span><span>1.2 mm</span></div>
+        <div class="spec-row"><span>Sizes</span><span>6×4 · 10×6 · 14×8 · 18×10 · Custom</span></div>
+        <div class="spec-row"><span>Mounting</span><span>4 pre-drilled holes · SS screws included</span></div>
+        <div class="spec-row"><span>Weather</span><span>Outdoor-grade · Rust-proof · UV-stable</span></div>
+        <div class="spec-row"><span>Max Lines</span><span>3 lines of custom text</span></div>
+        <div class="spec-row"><span>Design Preview</span><span>Emailed within 24 hrs · Free</span></div>
+        <div class="spec-row"><span>Delivery</span><span>5–8 days standard · Pan-India</span></div>
+      </div>
+      <div class="ptab-content" id="tab-care">
+        <p style="margin-bottom:12px"><strong style="color:var(--light)">Installation:</strong> Drill 6 mm holes at the marked positions, insert wall plugs, fix with the included SS screws. Takes under 5 minutes with a basic drill.</p>
+        <p><strong style="color:var(--light)">Cleaning:</strong> Wipe with a damp soft cloth monthly. Mild soap is safe. Avoid abrasive scrubbers. The matte finish is fingerprint-resistant and stays clean with minimal effort — even outdoors.</p>
+      </div>
+      <div class="ptab-content" id="tab-faq">
+        <div style="margin-bottom:16px"><strong style="color:var(--light);display:block;margin-bottom:6px">Can I get a preview before payment?</strong>We send the design proof after order placement, before manufacturing. You must approve the design before we start crafting.</div>
+        <div style="margin-bottom:16px"><strong style="color:var(--light);display:block;margin-bottom:6px">Can I include a logo or symbol?</strong>Yes! Mention it in the Special Instructions field. We support custom logos, religious symbols (Om, Cross, etc.), and decorative elements.</div>
+        <div style="margin-bottom:16px"><strong style="color:var(--light);display:block;margin-bottom:6px">What languages are supported?</strong>English, Hindi, Kannada, Tamil, Telugu, Marathi, Gujarati, and most Indian scripts. Specify your language when ordering.</div>
+        <div><strong style="color:var(--light);display:block;margin-bottom:6px">What if I don't like the design?</strong>You can request unlimited revisions on the digital proof. We only manufacture once you're 100% happy.</div>
+      </div>
+    </div>
+
+  </div><!-- /info-col -->
+</div><!-- /product-wrap -->
+
+<!-- REVIEWS -->
+<div class="reviews-section" id="reviews">
+  <div class="sec-tag">Customer Reviews</div>
+  <h2 class="sec-title">What Our Customers <em>Say</em></h2>
+  <div class="review-summary">
+    <div>
+      <div class="big-num">5.0</div>
+      <div class="big-stars">★★★★★</div>
+      <div class="big-count">42 reviews</div>
+    </div>
+    <div>
+      <div class="bar-row"><span class="bar-lbl">5★</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><span class="bar-cnt">37</span></div>
+      <div class="bar-row"><span class="bar-lbl">4★</span><div class="bar-track"><div class="bar-fill" style="width:10%"></div></div><span class="bar-cnt">4</span></div>
+      <div class="bar-row"><span class="bar-lbl">3★</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="bar-cnt">1</span></div>
+      <div class="bar-row"><span class="bar-lbl">2★</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div><span class="bar-cnt">0</span></div>
+      <div class="bar-row"><span class="bar-lbl">1★</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div><span class="bar-cnt">0</span></div>
+    </div>
+  </div>
+  <div class="review-grid">
+    <div class="rev-card">
+      <div class="rev-head">
+        <div class="rev-av"><div class="av-circle">R</div><div><div class="rev-name">Rajesh Sharma</div><div class="rev-date">March 2026 · Bengaluru</div></div></div>
+        <div class="rev-stars">★★★★★</div>
+      </div>
+      <p class="rev-text">"The matte finish looks incredibly premium and the laser engraving is razor-sharp. Received the design preview within a few hours. Our new home entrance looks stunning."</p>
+      <div class="rev-verified">✓ Verified Purchase</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-head">
+        <div class="rev-av"><div class="av-circle">P</div><div><div class="rev-name">Priya Nair</div><div class="rev-date">February 2026 · Chennai</div></div></div>
+        <div class="rev-stars">★★★★★</div>
+      </div>
+      <p class="rev-text">"Heavy, solid, and the matte finish is exactly what I wanted — no fingerprints, very clean look. Customer service was very responsive when I asked to tweak the font."</p>
+      <div class="rev-verified">✓ Verified Purchase</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-head">
+        <div class="rev-av"><div class="av-circle">V</div><div><div class="rev-name">Vikram Menon</div><div class="rev-date">January 2026 · Hyderabad</div></div></div>
+        <div class="rev-stars">★★★★★</div>
+      </div>
+      <p class="rev-text">"Quality is way beyond what I expected at this price. The preview approval process gave me full confidence. Will order again for the office."</p>
+      <div class="rev-verified">✓ Verified Purchase</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-head">
+        <div class="rev-av"><div class="av-circle">A</div><div><div class="rev-name">Anita Verma</div><div class="rev-date">Dec 2025 · Mumbai</div></div></div>
+        <div class="rev-stars">★★★★★</div>
+      </div>
+      <p class="rev-text">"Got as a housewarming gift. My friends were incredibly impressed. PrakulArts sent a preview within hours — the whole experience was smooth and professional."</p>
+      <div class="rev-verified">✓ Verified Purchase</div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED -->
+<div class="related-section">
+  <div class="sec-tag">You May Also Like</div>
+  <h2 class="sec-title">Explore Other <em>Finishes</em></h2>
+  <div class="rel-grid">
+    <div class="rel-card"><div class="rel-img bg-gold" style="color:rgba(201,168,76,.4);font-size:40px;display:flex;align-items:center;justify-content:center">✦</div><div class="rel-body"><div class="rel-mat">Gold</div><div class="rel-name">Gold Gloss Nameplate</div><div class="rel-price">₹1,199</div></div></div>
+    <div class="rel-card"><div class="rel-img bg-brass" style="color:rgba(201,168,76,.3);font-size:40px;display:flex;align-items:center;justify-content:center">◈</div><div class="rel-body"><div class="rel-mat">Brass</div><div class="rel-name">Brass Matte Nameplate</div><div class="rel-price">₹1,099</div></div></div>
+    <div class="rel-card"><div class="rel-img bg-rg" style="color:rgba(201,140,120,.4);font-size:40px;display:flex;align-items:center;justify-content:center">✦</div><div class="rel-body"><div class="rel-mat">Rose Gold</div><div class="rel-name">Rose Gold Nameplate</div><div class="rel-price">₹1,299</div></div></div>
+    <div class="rel-card"><div class="rel-img bg-3d" style="color:rgba(100,200,200,.3);font-size:40px;display:flex;align-items:center;justify-content:center">⬡</div><div class="rel-body"><div class="rel-mat">3D Raised</div><div class="rel-name">SS 3D Letter Nameplate</div><div class="rel-price">₹1,499</div></div></div>
+  </div>
+</div>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-left">
+    <div class="sticky-name">SS Matte Nameplate · <span id="stickySize">Small</span></div>
+    <div class="sticky-price" id="stickyPrice">₹799</div>
+  </div>
+  <div class="sticky-right">
+    <a class="sticky-wa" href="https://wa.me/91XXXXXXXXXX?text=Hi%20PrakulArts%2C%20I%20need%20help%20with%20my%20nameplate%20order" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Expert
+    </a>
+    <button class="sticky-order">Order Now →</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   LIVE NAMEPLATE PREVIEW (Canvas)
+══════════════════════════════════════════ */
+const MATERIALS = {
+  ss:   { bg:'#3A3A3A', grad:['#4A4A4A','#5A5A5A','#3A3A3A'], text:'#E8E8E8', sub:'#BDBDBD', border:'rgba(255,255,255,0.12)', shadow:'rgba(0,0,0,0.6)', label:'Stainless Steel Matte' },
+  gold: { bg:'#8B6520', grad:['#C9A84C','#E8C97A','#8B6520'], text:'#1A1200', sub:'#3A2800', border:'rgba(201,168,76,0.4)', shadow:'rgba(100,60,0,0.7)', label:'Gold Finish' },
+  brass:{ bg:'#7A6025', grad:['#B8922A','#D4A84C','#7A6025'], text:'#1A1000', sub:'#3A2000', border:'rgba(184,146,42,0.4)', shadow:'rgba(80,50,0,0.7)', label:'Brass Matte' },
+  rg:   { bg:'#8B4840', grad:['#C97A70','#E8A8A0','#8B4840'], text:'#2A0A08', sub:'#4A1A18', border:'rgba(201,122,112,0.4)', shadow:'rgba(100,40,30,0.7)', label:'Rose Gold' },
+};
+
+let currentMat = 'ss';
+let currentText = { l1:'', l2:'', l3:'' };
+const canvas = document.getElementById('nameplateCanvas');
+const ctx = canvas.getContext('2d');
+
+function drawPlate() {
+  const W = 440, H = 220;
+  canvas.width  = W;
+  canvas.height = H;
+  canvas.style.width  = Math.min(W, 380) + 'px';
+  canvas.style.height = Math.min(H, 190) + 'px';
+
+  const mat = MATERIALS[currentMat];
+  const r   = 14; // corner radius
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Drop shadow
+  ctx.save();
+  ctx.shadowColor = mat.shadow;
+  ctx.shadowBlur  = 28;
+  ctx.shadowOffsetY = 6;
+
+  // Rounded rect path
+  function roundRect(x,y,w,h,rad) {
+    ctx.beginPath();
+    ctx.moveTo(x+rad,y);
+    ctx.lineTo(x+w-rad,y);
+    ctx.quadraticCurveTo(x+w,y,x+w,y+rad);
+    ctx.lineTo(x+w,y+h-rad);
+    ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
+    ctx.lineTo(x+rad,y+h);
+    ctx.quadraticCurveTo(x,y+h,x,y+h-rad);
+    ctx.lineTo(x,y+rad);
+    ctx.quadraticCurveTo(x,y,x+rad,y);
+    ctx.closePath();
+  }
+
+  roundRect(2,2,W-4,H-4,r);
+
+  // Plate gradient fill
+  const grad = ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0, mat.grad[0]);
+  grad.addColorStop(0.5, mat.grad[1]);
+  grad.addColorStop(1, mat.grad[2]);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.restore();
+
+  // Subtle brushed-metal lines (matte texture simulation)
+  if (currentMat === 'ss') {
+    ctx.save();
+    roundRect(2,2,W-4,H-4,r);
+    ctx.clip();
+    for (let i=0;i<H;i+=3) {
+      ctx.strokeStyle = i%6===0 ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.04)';
+      ctx.lineWidth   = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(0,i);
+      ctx.lineTo(W,i);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Border
+  ctx.save();
+  roundRect(2,2,W-4,H-4,r);
+  ctx.strokeStyle = mat.border;
+  ctx.lineWidth   = 1.5;
+  ctx.stroke();
+  ctx.restore();
+
+  // Inner inset frame
+  ctx.save();
+  roundRect(10,10,W-20,H-20,r-4);
+  ctx.strokeStyle = (currentMat==='ss') ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.12)';
+  ctx.lineWidth   = 0.8;
+  ctx.stroke();
+  ctx.restore();
+
+  // Corner screw holes
+  const screwR = 5, pad = 20;
+  [[pad,pad],[W-pad,pad],[pad,H-pad],[W-pad,H-pad]].forEach(([x,y]) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x,y,screwR,0,Math.PI*2);
+    ctx.fillStyle   = (currentMat==='ss') ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.25)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth   = 0.8;
+    ctx.stroke();
+    // Cross slot
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth   = 1;
+    ctx.beginPath();ctx.moveTo(x-3,y);ctx.lineTo(x+3,y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x,y-3);ctx.lineTo(x,y+3);ctx.stroke();
+    ctx.restore();
+  });
+
+  // TEXT RENDERING
+  const l1 = currentText.l1 || 'Your Name Here';
+  const l2 = currentText.l2 || '';
+  const l3 = currentText.l3 || '';
+  const hasL2 = l2.trim().length > 0;
+  const hasL3 = l3.trim().length > 0;
+  const totalLines = 1 + (hasL2?1:0) + (hasL3?1:0);
+
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (totalLines === 1) {
+    // Single line — big and centred
+    let fs = Math.min(62, Math.floor(320/Math.max(l1.length,1)*1.7));
+    fs = Math.max(22, Math.min(fs, 62));
+    ctx.font = `300 ${fs}px 'Cormorant Garamond', 'Georgia', serif`;
+    ctx.fillStyle = mat.text;
+    ctx.fillText(l1, W/2, H/2 + 2);
+
+  } else if (totalLines === 2) {
+    let fs1 = Math.min(48, Math.floor(300/Math.max(l1.length,1)*1.5));
+    fs1 = Math.max(18, Math.min(fs1, 48));
+    ctx.font = `300 ${fs1}px 'Cormorant Garamond', 'Georgia', serif`;
+    ctx.fillStyle = mat.text;
+    ctx.fillText(l1, W/2, H/2 - 20);
+    let fs2 = Math.min(26, Math.floor(300/Math.max(l2.length,1)*1.2));
+    fs2 = Math.max(13, Math.min(fs2, 26));
+    ctx.font = `300 ${fs2}px 'DM Sans', sans-serif`;
+    ctx.fillStyle = mat.sub;
+    ctx.fillText(l2, W/2, H/2 + 22);
+
+  } else {
+    let fs1 = Math.min(40, Math.floor(300/Math.max(l1.length,1)*1.4));
+    fs1 = Math.max(16, Math.min(fs1, 40));
+    ctx.font = `300 ${fs1}px 'Cormorant Garamond', 'Georgia', serif`;
+    ctx.fillStyle = mat.text;
+    ctx.fillText(l1, W/2, H/2 - 32);
+    let fs2 = Math.min(22, Math.floor(300/Math.max(l2.length,1)*1.1));
+    fs2 = Math.max(11, Math.min(fs2, 22));
+    ctx.font = `300 ${fs2}px 'DM Sans', sans-serif`;
+    ctx.fillStyle = mat.sub;
+    ctx.fillText(l2, W/2, H/2 + 2);
+    let fs3 = Math.min(20, Math.floor(300/Math.max(l3.length,1)*1.1));
+    fs3 = Math.max(11, Math.min(fs3, 20));
+    ctx.font = `italic 300 ${fs3}px 'Cormorant Garamond', 'Georgia', serif`;
+    ctx.fillStyle = mat.sub;
+    ctx.fillText(l3, W/2, H/2 + 32);
+  }
+
+  ctx.restore();
+
+  // Update thumb0 to match
+  drawThumb0();
+}
+
+function drawThumb0() {
+  const tc = document.getElementById('thumb0');
+  tc.width = 68; tc.height = 68;
+  const tctx = tc.getContext('2d');
+  const mat   = MATERIALS[currentMat];
+  const grad  = tctx.createLinearGradient(0,0,68,68);
+  grad.addColorStop(0, mat.grad[0]);
+  grad.addColorStop(0.5, mat.grad[1]);
+  grad.addColorStop(1, mat.grad[2]);
+  tctx.beginPath();
+  tctx.roundRect(2,2,64,64,6);
+  tctx.fillStyle = grad;
+  tctx.fill();
+  tctx.strokeStyle = mat.border;
+  tctx.lineWidth = 1;
+  tctx.stroke();
+  const txt = currentText.l1 || 'PA';
+  const fs  = Math.max(10, Math.min(18, Math.floor(52/Math.max(txt.length,1)*1.4)));
+  tctx.font = `300 ${fs}px Georgia,serif`;
+  tctx.fillStyle = mat.text;
+  tctx.textAlign = 'center';
+  tctx.textBaseline = 'middle';
+  tctx.fillText(txt.substring(0,8), 34, 34);
+}
+
+function updatePreview() {
+  currentText.l1 = document.getElementById('mainText').value;
+  currentText.l2 = document.getElementById('line2Text').value;
+  currentText.l3 = document.getElementById('line3Text').value;
+  const rem = 30 - currentText.l1.length;
+  document.getElementById('mainCount').textContent = rem;
+  document.getElementById('liveIndicator').classList.toggle('show', currentText.l1.length > 0);
+  drawPlate();
+}
+
+function switchMat(btn, mat) {
+  document.querySelectorAll('.mat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMat = mat;
+  document.getElementById('previewLabel').textContent = '● ' + MATERIALS[mat].label;
+  drawPlate();
+}
+
+/* ══════ OPTIONS ══════ */
+function selectSize(btn, label, price) {
+  document.querySelectorAll('.sz-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sizeLabel').textContent = label + ' selected';
+  if (price !== '0') {
+    document.getElementById('displayPrice').textContent = '₹' + parseInt(price).toLocaleString('en-IN');
+    document.getElementById('stickyPrice').textContent  = '₹' + parseInt(price).toLocaleString('en-IN');
+    document.getElementById('stickySize').textContent   = label.split(' — ')[0];
+  }
+}
+
+function selectFinish(btn, label) {
+  document.querySelectorAll('.fin-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('finishLabel').textContent = label + ' selected';
+}
+
+function selectThumb(el, idx) {
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function selectShip(el, type) {
+  document.querySelectorAll('.ship-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function switchTab(btn, id) {
+  document.querySelectorAll('.ptab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ptab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+/* ══════ CTA HANDLERS ══════ */
+function handleOrder() {
+  const name = document.getElementById('mainText').value.trim();
+  if (!name) {
+    document.getElementById('mainText').focus();
+    document.getElementById('mainText').style.borderColor = '#E24B4A';
+    document.getElementById('mainText').placeholder = '⚠ Please enter your name/text first';
+    setTimeout(() => {
+      document.getElementById('mainText').style.borderColor = '';
+      document.getElementById('mainText').placeholder = 'e.g. The Sharma Family';
+    }, 2500);
+    return;
+  }
+  alert('✅ Proceeding to checkout!\n\nName: ' + name + '\nWe\'ll email your design preview within 24 hours.');
+}
+
+function handleCustomize() {
+  const name = document.getElementById('mainText').value.trim();
+  const msg  = encodeURIComponent('Hi PrakulArts! I want to customise a nameplate.\n\nProduct: SS Matte House Nameplate\nName/Text: ' + (name||'[please help me decide]') + '\n\nCan you send me a free mockup?');
+  window.open('https://wa.me/91XXXXXXXXXX?text=' + msg, '_blank');
+}
+
+/* ══════ DELIVERY DATES ══════ */
+function setupDates() {
+  const today = new Date();
+  const fmt   = d => d.toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+  const add   = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+  document.getElementById('tl-d0').textContent = fmt(today);
+  document.getElementById('tl-d1').textContent = fmt(add(today,1)) + ' – ' + fmt(add(today,3));
+  document.getElementById('tl-d2').textContent = fmt(add(today,3)) + ' – ' + fmt(add(today,5));
+  document.getElementById('tl-d3').textContent = fmt(add(today,5)) + ' – ' + fmt(add(today,8));
+  document.getElementById('std-dates').textContent = '5–8 working days · by ' + fmt(add(today,8));
+  document.getElementById('exp-dates').textContent = '2–4 working days · by ' + fmt(add(today,4));
+}
+
+/* ══════ STICKY BAR ══════ */
+function initSticky() {
+  window.addEventListener('scroll', () => {
+    const top = document.getElementById('product-top').getBoundingClientRect().top;
+    const bar = document.getElementById('stickyBar');
+    if (top < -500) bar.classList.add('up');
+    else bar.classList.remove('up');
+  });
+}
+
+/* ══════ INIT ══════ */
+window.addEventListener('load', () => {
+  drawPlate();
+  setupDates();
+  initSticky();
+});
+</script>
+</body>
+</html>
